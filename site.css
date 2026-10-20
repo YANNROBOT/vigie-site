@@ -1,0 +1,583 @@
+/* ═══════════════════════════════════════════════════════════════════
+   LE SITE WEB DE VIGIE — dans le dessin du site de référence que le
+   directeur a montré (20/10/2026 : « c'est ce design que je veux »),
+   avec les couleurs et les polices de Vigie.
+
+   CE QUI VIENT DE LA RÉFÉRENCE : l'en-tête sombre plein écran, le menu
+   en pilule au centre, les très grands titres aux mots surlignés, les
+   étiquettes « (01) », le radar annoté, le panneau sombre à points, les
+   colonnes verticales qui s'ouvrent, la comparaison avant/après qu'on
+   fait glisser, l'entonnoir, la bande de chiffres à courbes, le bandeau
+   qui défile, les tarifs en éventail, les questions numérotées, le pied
+   sombre au nom géant.
+
+   CE QUI VIENT DE VIGIE : le vert #88c73b à la place du jaune-vert, la
+   nuit du radar, Nexa Pro pour les titres, Inter pour le reste.
+
+   Le site se lit sans script ; site.js ne fait qu'animer (compteurs,
+   glissière, entonnoir).
+   ═══════════════════════════════════════════════════════════════════ */
+
+@font-face {
+  font-family: "Nexa Pro";
+  src: url("polices/NexaPro-ExtraBold.otf") format("opentype");
+  font-weight: 800;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("polices/Inter-Variable.ttf") format("truetype");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+:root {
+  --vert: #88c73b;
+  --vert-clair: #b4e07a;
+  --vert-texte: #457a18;
+  --encre: #090909;
+  --nuit: #10180a;
+  --nuit-2: #162011;
+  --nuit-3: #1d2716;
+  --sur-nuit: #eef3e8;
+  --gris-nuit: rgba(238, 243, 232, .64);
+  --creme: #eef0e8;
+  --creme-2: #e2e5da;
+  --gris-texte: rgba(9, 9, 9, .64);
+  --trait: rgba(9, 9, 9, .1);
+  --trait-nuit: rgba(238, 243, 232, .12);
+  --rayon: 10px;
+  --rayon-grand: 28px;
+  --marge: clamp(20px, 4vw, 56px);
+  --largeur: 1320px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--creme); color: var(--encre);
+  font: 400 17px/1.55 "Inter", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+h1, h2, h3, .prix, .grand-nombre {
+  font-family: "Nexa Pro", "Inter", sans-serif; font-weight: 800;
+  letter-spacing: -.025em; line-height: 1; margin: 0;
+}
+h1 { font-size: clamp(48px, 8.4vw, 128px); }
+h2 { font-size: clamp(40px, 5.6vw, 84px); }
+h3 { font-size: 22px; letter-spacing: -.01em; }
+p { margin: 0 0 1em; }
+a { color: inherit; }
+img { max-width: 100%; display: block; }
+.contenu { max-width: var(--largeur); margin: 0 auto; padding-inline: var(--marge); }
+:focus-visible { outline: 3px solid var(--vert); outline-offset: 3px; border-radius: 6px; }
+
+/* LE SURLIGNAGE : des blocs verts derrière les mots, comme la référence. */
+mark {
+  background: var(--vert); color: var(--encre); padding: 0 .12em; margin: 0 .02em;
+  border-radius: .14em; -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+
+/* L'ÉTIQUETTE « (01) … » au-dessus des titres. */
+.etiquette {
+  display: inline-flex; align-items: center; gap: 8px; margin-bottom: 26px;
+  padding: 6px 14px 6px 10px; border-radius: 999px; background: var(--creme-2);
+  font: 500 13px/1 "Inter", sans-serif; letter-spacing: .02em; font-variant-numeric: tabular-nums;
+}
+.etiquette::before { content: ""; width: 8px; height: 8px; border-radius: 999px; background: var(--vert); }
+.nuit .etiquette, .heros .etiquette { background: rgba(238, 243, 232, .08); color: var(--sur-nuit); }
+
+/* ── les boutons ─────────────────────────────────────────────────── */
+.bouton {
+  display: inline-flex; align-items: center; gap: 14px; min-height: 52px;
+  padding: 6px 6px 6px 22px; border-radius: 999px; border: 0; cursor: pointer;
+  background: var(--encre); color: #fff; font: 600 15px/1 "Inter", sans-serif;
+  text-decoration: none; white-space: nowrap; transition: transform .2s;
+}
+.bouton:hover { transform: translateY(-1px); }
+.bouton .rond {
+  display: grid; place-items: center; width: 40px; height: 40px; border-radius: 999px;
+  background: var(--vert); color: var(--encre); flex: none;
+}
+.bouton .rond svg { width: 18px; height: 18px; }
+.bouton.vert { background: var(--vert); color: var(--encre); }
+.bouton.vert .rond { background: var(--encre); color: var(--vert); }
+.bouton.verre { background: rgba(238, 243, 232, .12); color: var(--sur-nuit); backdrop-filter: blur(8px); }
+.bouton.verre .rond { background: rgba(238, 243, 232, .18); color: var(--sur-nuit); }
+
+/* ── le menu ─────────────────────────────────────────────────────── */
+.menu {
+  position: absolute; z-index: 20; top: 0; left: 0; right: 0;
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 20px;
+  max-width: var(--largeur); margin: 0 auto; padding: 22px var(--marge);
+}
+.menu .marque { display: inline-flex; align-items: center; justify-self: start; }
+.menu .marque img { height: 34px; width: auto; }
+.menu .liens {
+  display: flex; gap: 4px; padding: 6px; border-radius: 999px;
+  background: rgba(238, 243, 232, .1); backdrop-filter: blur(10px);
+  border: 1px solid var(--trait-nuit);
+}
+.menu .liens a {
+  padding: 9px 18px; border-radius: 999px; color: var(--sur-nuit); text-decoration: none;
+  font: 500 14px/1 "Inter", sans-serif;
+}
+.menu .liens a:hover { background: rgba(238, 243, 232, .1); }
+.menu .liens a[aria-current="page"] { background: var(--vert); color: var(--encre); }
+.menu .droite { justify-self: end; display: flex; align-items: center; gap: 10px; }
+.menu .bouton { min-height: 46px; }
+/* LE CHANGEMENT DE LANGUE : la langue d'arrivée, écrite dans sa langue. */
+.menu .langue {
+  display: inline-flex; align-items: center; gap: 8px; padding: 6px 6px 6px 14px; border-radius: 999px;
+  border: 1px solid var(--trait-nuit); background: rgba(238, 243, 232, .06); color: var(--sur-nuit);
+  font: 500 13px/1 "Inter", sans-serif; text-decoration: none;
+}
+.menu .langue b { display: grid; place-items: center; min-width: 30px; height: 30px; border-radius: 999px; background: rgba(238, 243, 232, .14); font-size: 12px; font-weight: 700; }
+.menu .langue:hover { border-color: var(--vert); }
+.menu .bouton .rond { width: 34px; height: 34px; }
+
+/* ── l'en-tête sombre ────────────────────────────────────────────── */
+.nuit { background: var(--nuit); color: var(--sur-nuit); }
+.heros {
+  position: relative; overflow: hidden; min-height: 100vh; min-height: 100svh;
+  display: flex; flex-direction: column; justify-content: center; padding: 130px 0 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 72% 50%, rgba(136, 199, 59, .14), transparent 70%),
+    var(--nuit);
+  color: var(--sur-nuit);
+}
+.heros .fond-radar {
+  position: absolute; right: -12vw; top: 50%; width: min(1100px, 92vw); height: auto;
+  transform: translateY(-50%); pointer-events: none;
+}
+.heros .contenu { position: relative; z-index: 2; width: 100%; }
+.heros .badge {
+  display: inline-flex; align-items: center; gap: 10px; margin-bottom: 28px;
+  padding: 8px 16px; border-radius: 999px; background: rgba(238, 243, 232, .08);
+  border: 1px solid var(--trait-nuit); font-size: 14px; color: var(--sur-nuit);
+}
+.heros .badge::before { content: ""; width: 8px; height: 8px; border-radius: 999px; background: var(--vert); box-shadow: 0 0 0 4px rgba(136, 199, 59, .25); animation: pouls 2s ease-in-out infinite; }
+@keyframes pouls { 50% { box-shadow: 0 0 0 8px rgba(136, 199, 59, 0); } }
+.heros h1 { max-width: 11.5ch; }
+.heros .chapeau { font-size: clamp(17px, 1.5vw, 20px); color: var(--gris-nuit); max-width: 560px; margin: 30px 0 34px; }
+.heros .boutons { display: flex; flex-wrap: wrap; gap: 14px; }
+.heros-bas { position: relative; z-index: 2; margin-top: auto; padding-top: 70px; }
+.heros-bas .contenu {
+  display: grid; grid-template-columns: auto 1fr auto; align-items: end; gap: 30px;
+  padding-bottom: 30px;
+}
+.compteur span { display: block; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--gris-nuit); margin-bottom: 8px; }
+.compteur b { font: 800 clamp(34px, 3.4vw, 48px)/1 "Nexa Pro", sans-serif; font-variant-numeric: tabular-nums; }
+.puces { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.puce {
+  display: inline-flex; gap: 8px; align-items: center; padding: 7px 12px; border-radius: 999px;
+  background: rgba(238, 243, 232, .07); border: 1px solid var(--trait-nuit); font-size: 13px; color: var(--sur-nuit);
+  text-decoration: none;
+}
+.puce b { color: var(--vert); font-weight: 600; font-variant-numeric: tabular-nums; }
+.note-heros { text-align: right; font-size: 13px; color: var(--gris-nuit); line-height: 1.5; }
+.note-heros b { color: var(--sur-nuit); }
+
+/* L'en-tête des pages intérieures : plus court, même nuit. */
+.heros.court { min-height: 0; padding: 170px 0 100px; }
+.heros.court h1 { max-width: 14ch; font-size: clamp(46px, 7vw, 108px); }
+.heros.court .fond-radar { width: min(820px, 80vw); right: -14vw; opacity: .6; }
+
+/* ── les sections ────────────────────────────────────────────────── */
+.section { padding: clamp(80px, 10vw, 140px) 0; }
+.tete-section { display: grid; grid-template-columns: 1fr minmax(0, 420px); gap: 40px; align-items: end; margin-bottom: 56px; }
+.tete-section p { color: var(--gris-texte); font-size: 17px; margin: 0 0 18px; }
+.nuit .tete-section p { color: var(--gris-nuit); }
+
+/* (01) Le radar annoté */
+.deux-radar { display: grid; grid-template-columns: 1fr 1.05fr; gap: 50px; align-items: center; }
+.deux-radar .texte p { font-size: 18px; color: var(--gris-texte); max-width: 470px; margin-top: 26px; }
+.signature { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; margin-top: 34px; padding-top: 22px; border-top: 1px solid var(--trait); font-size: 13px; color: var(--gris-texte); font-variant-numeric: tabular-nums; }
+.signature b { color: var(--encre); }
+.radar-clair { width: 100%; height: auto; }
+.radar-clair .disque { fill: #f6f7f2; stroke: var(--trait); }
+.radar-clair .anneau { fill: none; stroke: rgba(9, 9, 9, .12); }
+.radar-clair .croix { stroke: rgba(9, 9, 9, .08); }
+.radar-clair .graduation { fill: rgba(9, 9, 9, .45); font: 500 6px "Inter", sans-serif; letter-spacing: .08em; }
+.radar-clair .cercle-nom { fill: rgba(9, 9, 9, .45); font: 600 5px "Inter", sans-serif; letter-spacing: .14em; }
+.radar-clair .point { fill: var(--encre); }
+.radar-clair .point.fort { fill: var(--vert); stroke: var(--encre); stroke-width: .8; }
+.radar-clair .nom { fill: var(--encre); font: 600 6.4px "Inter", sans-serif; }
+.radar-clair .nom.leger { fill: rgba(9, 9, 9, .55); font-weight: 500; }
+.radar-clair .etiq-note { fill: var(--vert); }
+.radar-clair .etiq-texte { fill: var(--encre); font: 700 5.4px "Inter", sans-serif; }
+.radar-clair .balai { transform-origin: 160px 160px; animation: tour 7s linear infinite; }
+@keyframes tour { to { transform: rotate(360deg); } }
+
+/* Le panneau sombre aux points : « 1 signal sur 40 » */
+.panneau-points {
+  position: relative; overflow: hidden; margin-top: clamp(60px, 8vw, 110px);
+  border-radius: var(--rayon-grand); background: var(--nuit); color: var(--sur-nuit);
+  min-height: 520px;
+}
+.panneau-points svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.panneau-points .point { fill: rgba(238, 243, 232, .26); }
+.panneau-points .point.vif { fill: var(--vert); }
+.panneau-points .etiq rect { fill: var(--vert); }
+.panneau-points .etiq text { fill: var(--encre); font: 700 11px "Inter", sans-serif; }
+.panneau-points .sous-etiq { fill: var(--gris-nuit); font: 500 10px "Inter", sans-serif; }
+.panneau-points .legende-points { position: absolute; left: clamp(24px, 4vw, 48px); bottom: clamp(24px, 4vw, 44px); }
+.panneau-points .legende-points .grand-nombre { font-size: clamp(64px, 9vw, 140px); color: var(--vert); }
+.panneau-points .legende-points .grand-nombre small { font-size: .32em; color: var(--sur-nuit); margin-right: .2em; }
+.panneau-points .legende-points p { font: 800 clamp(22px, 2.4vw, 32px)/1.1 "Nexa Pro", sans-serif; margin: 6px 0 0; }
+
+/* (02) Les colonnes verticales qui s'ouvrent */
+.canaux { display: flex; gap: 12px; height: 580px; }
+.canal { position: relative; display: flex; flex: 0 0 92px; transition: flex .5s cubic-bezier(.3, .7, .2, 1); }
+.canal:has(input:checked) { flex: 1 1 auto; }
+.canal input { position: absolute; opacity: 0; pointer-events: none; }
+.canal label {
+  flex: 0 0 92px; display: flex; flex-direction: column; justify-content: space-between; align-items: center;
+  padding: 18px 0; border-radius: 22px; cursor: pointer; overflow: hidden;
+  background: var(--t-fond, var(--nuit)); color: var(--t-texte, var(--sur-nuit));
+  border: 1px solid var(--t-bord, transparent);
+}
+.canal .num { font: 600 12px "Inter", sans-serif; opacity: .7; font-variant-numeric: tabular-nums; }
+.canal .nom-canal { writing-mode: vertical-rl; transform: rotate(180deg); font: 800 28px/1 "Nexa Pro", sans-serif; letter-spacing: -.01em; white-space: nowrap; }
+.canal .plus { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 999px; border: 1px solid currentColor; font: 400 20px/1 "Inter", sans-serif; opacity: .8; }
+.canal input:checked + label { display: none; }
+.canal input:focus-visible + label { outline: 3px solid var(--vert); outline-offset: 3px; }
+.canal .volet {
+  display: none; flex: 1; grid-template-columns: minmax(0, .9fr) minmax(0, 1.2fr); gap: 34px; align-items: center;
+  padding: 34px; border-radius: 22px; background: var(--vert); color: var(--encre); overflow: hidden;
+  animation: ouvrir .45s ease both;
+}
+.canal input:checked ~ .volet { display: grid; }
+@keyframes ouvrir { from { opacity: 0; transform: translateX(14px); } }
+.volet .num-volet { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 999px; background: var(--encre); color: var(--vert); font: 700 13px "Inter", sans-serif; margin-bottom: 22px; }
+.volet h3 { font-size: clamp(34px, 3.6vw, 52px); letter-spacing: -.025em; margin-bottom: 18px; line-height: 1; }
+.volet p { font-size: 16px; max-width: 360px; }
+.volet ul { list-style: none; padding: 0; margin: 18px 0 26px; display: grid; gap: 9px; font-size: 15px; }
+.volet li { display: flex; gap: 10px; align-items: center; }
+.volet li::before { content: "✓"; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 999px; background: var(--encre); color: var(--vert); font-size: 11px; font-weight: 700; flex: none; }
+.volet .apercu { align-self: stretch; display: flex; align-items: center; justify-content: center; min-height: 0; }
+.volet .apercu img { width: 100%; border-radius: 14px; box-shadow: 0 30px 60px rgba(9, 9, 9, .28); }
+.volet .apercu.telephone img { width: auto; max-width: 250px; max-height: 500px; border-radius: 26px; }
+.pied-canaux { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; align-items: center; margin-top: 22px; font-size: 13px; color: var(--gris-texte); }
+.t-sombre { --t-fond: var(--nuit); --t-texte: var(--sur-nuit); }
+.t-blanc { --t-fond: #fff; --t-texte: var(--encre); --t-bord: var(--trait); }
+.t-creme { --t-fond: var(--creme-2); --t-texte: var(--encre); }
+.t-vert { --t-fond: var(--vert-clair); --t-texte: var(--encre); }
+
+/* (03) Avant / avec Vigie : la glissière */
+.comparaison {
+  position: relative; overflow: hidden; border-radius: var(--rayon-grand); aspect-ratio: 16 / 8.4;
+  background: var(--nuit-2); --pos: 50%; user-select: none;
+}
+.comparaison .couche { position: absolute; inset: 0; }
+.comparaison .couche img { width: 100%; height: 100%; object-fit: cover; object-position: top left; }
+.comparaison .avant img { filter: grayscale(1) brightness(.42) blur(1.5px); }
+.comparaison .apres { clip-path: inset(0 0 0 var(--pos)); }
+.comparaison .apres::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent 35%, rgba(16, 24, 10, .62)); pointer-events: none; }
+.comparaison .trait {
+  position: absolute; top: 0; bottom: 0; left: var(--pos); width: 2px; margin-left: -1px;
+  background: var(--vert); pointer-events: none; z-index: 3;
+}
+.comparaison .poignee {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  display: grid; place-items: center; width: 54px; height: 54px; border-radius: 999px;
+  background: rgba(16, 24, 10, .75); border: 2px solid var(--vert); color: var(--vert); font-weight: 700; font-size: 14px;
+}
+.comparaison input[type="range"] {
+  position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; z-index: 4;
+}
+.comparaison .bulle-cote { position: absolute; z-index: 2; padding: 7px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; }
+.comparaison .avant .bulle-cote { left: 22px; top: 22px; background: rgba(238, 243, 232, .14); color: var(--sur-nuit); }
+.comparaison .apres .bulle-cote { right: 22px; top: 22px; background: var(--vert); color: var(--encre); }
+.comparaison .chiffre-cote { position: absolute; z-index: 2; bottom: 26px; }
+.comparaison .avant .chiffre-cote { left: 28px; }
+.comparaison .apres .chiffre-cote { right: 28px; text-align: right; }
+.comparaison .chiffre-cote span { display: block; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--gris-nuit); margin-bottom: 6px; }
+.comparaison .chiffre-cote b { font: 800 clamp(48px, 7vw, 112px)/1 "Nexa Pro", sans-serif; font-variant-numeric: tabular-nums; }
+.comparaison .avant .chiffre-cote b { color: rgba(238, 243, 232, .55); }
+.comparaison .apres .chiffre-cote b { color: var(--vert); }
+.sous-comparaison { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 30px; }
+.sous-comparaison h3 { font-size: clamp(26px, 2.6vw, 36px); line-height: 1.08; margin-bottom: 12px; }
+.sous-comparaison p { color: var(--gris-nuit); }
+.sous-comparaison .petit { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--gris-nuit); margin-bottom: 12px; }
+
+/* (04) L'entonnoir */
+.entonnoir-deux { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 60px; align-items: center; }
+.entonnoir-deux .texte > p { color: var(--gris-texte); font-size: 17px; max-width: 440px; margin-top: 24px; }
+.pas-liste { list-style: none; padding: 0; margin: 36px 0 0; border-top: 1px solid var(--trait); }
+.pas-liste li { display: grid; grid-template-columns: 34px 1fr; gap: 14px; padding: 18px 0; border-bottom: 1px solid var(--trait); transition: opacity .4s; }
+.anime .pas-liste li { opacity: .38; }
+.anime .pas-liste li.allume { opacity: 1; }
+.pas-liste .num { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 999px; background: var(--vert); font: 600 12px "Inter", sans-serif; }
+.anime .pas-liste li .num { background: var(--creme-2); }
+.anime .pas-liste li.allume .num { background: var(--vert); }
+.pas-liste h3 { font-size: 22px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.pas-liste h3 small { font: 600 11px "Inter", sans-serif; letter-spacing: .06em; text-transform: uppercase; padding: 4px 8px; border-radius: 6px; background: var(--creme-2); color: var(--gris-texte); }
+.pas-liste p { margin: 6px 0 0; color: var(--gris-texte); font-size: 15px; }
+.entonnoir { display: grid; gap: 10px; justify-items: center; }
+.etage {
+  position: relative; width: var(--l); height: 108px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: var(--vert-clair); clip-path: polygon(0 0, 100% 0, calc(100% - 26px) 100%, 26px 100%);
+  transition: background .5s;
+}
+.etage:last-child { background: var(--vert); }
+.anime .etage { background: var(--creme-2); }
+.anime .etage.allume { background: var(--vert-clair); }
+.anime .etage:last-child.allume { background: var(--vert); }
+.etage .nom-etage { display: inline-flex; gap: 6px; align-items: center; padding: 4px 10px; border-radius: 999px; background: #fff; font: 600 11px "Inter", sans-serif; letter-spacing: .06em; text-transform: uppercase; }
+.etage .nom-etage i { font-style: normal; display: grid; place-items: center; width: 16px; height: 16px; border-radius: 999px; background: var(--encre); color: var(--vert); font-size: 9px; }
+.etage b { font: 800 40px/1.1 "Nexa Pro", sans-serif; font-variant-numeric: tabular-nums; margin-top: 4px; }
+.legende-entonnoir { margin-top: 16px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--gris-texte); text-align: center; }
+
+/* (05) La bande verte des chiffres */
+.bande-chiffres { background: var(--vert); padding: clamp(80px, 9vw, 120px) 0 0; border-radius: var(--rayon-grand) var(--rayon-grand) 0 0; overflow: hidden; }
+.bande-chiffres .etiquette { background: rgba(9, 9, 9, .1); }
+.bande-chiffres .etiquette::before { background: var(--encre); }
+.bande-chiffres .tete-section p { color: rgba(9, 9, 9, .78); }
+.cartes-chiffres { display: grid; grid-template-columns: repeat(4, 1fr); background: var(--nuit); color: var(--sur-nuit); border-radius: 22px; overflow: hidden; }
+.carte-chiffre { padding: 28px; border-right: 1px solid var(--trait-nuit); }
+.carte-chiffre:last-child { border-right: 0; }
+.carte-chiffre .titre-carte { font-size: 13px; color: var(--gris-nuit); }
+.carte-chiffre b { display: block; font: 800 clamp(44px, 4.4vw, 64px)/1 "Nexa Pro", sans-serif; margin: 18px 0 14px; font-variant-numeric: tabular-nums; }
+.carte-chiffre .hausse { display: inline-flex; gap: 6px; align-items: center; padding: 4px 10px; border-radius: 999px; background: rgba(136, 199, 59, .16); color: var(--vert); font-size: 12px; font-weight: 600; }
+.carte-chiffre svg { display: block; width: 100%; height: 70px; margin-top: 22px; }
+.carte-chiffre svg .aire { fill: rgba(136, 199, 59, .16); }
+.carte-chiffre svg .ligne { fill: none; stroke: var(--vert); stroke-width: 2; }
+.carte-chiffre .mois { display: flex; justify-content: space-between; font-size: 11px; color: var(--gris-nuit); margin-top: 6px; }
+.defile { margin-top: clamp(50px, 6vw, 80px); padding: 16px 0; border-top: 1px solid rgba(9, 9, 9, .14); overflow: hidden; white-space: nowrap; }
+.defile .rail-defile { display: inline-flex; gap: 46px; animation: defiler 40s linear infinite; padding-left: 46px; }
+.defile span { display: inline-flex; gap: 10px; align-items: center; font-size: 13px; font-weight: 600; letter-spacing: .04em; }
+.defile span::before { content: ""; width: 8px; height: 8px; border-radius: 999px; background: var(--encre); }
+.defile em { font-style: normal; opacity: .62; font-weight: 500; }
+@keyframes defiler { to { transform: translateX(-50%); } }
+
+/* ── les pages intérieures ───────────────────────────────────────── */
+.ecrans { display: grid; gap: clamp(60px, 8vw, 110px); }
+.ecran { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 56px; align-items: center; }
+.ecran.inverse { grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); }
+.ecran.inverse .visuel { order: -1; }
+.ecran .num-ecran { font: 600 13px "Inter", sans-serif; color: var(--gris-texte); margin-bottom: 14px; font-variant-numeric: tabular-nums; }
+.ecran h2 { font-size: clamp(36px, 4.4vw, 64px); margin-bottom: 22px; }
+.ecran p { font-size: 18px; color: var(--gris-texte); max-width: 470px; }
+.ecran ul { list-style: none; padding: 0; margin: 24px 0 0; display: grid; gap: 10px; }
+.ecran li { display: flex; gap: 10px; align-items: center; }
+.ecran li::before { content: "✓"; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 999px; background: var(--vert); color: var(--encre); font-size: 12px; font-weight: 700; flex: none; }
+.visuel { position: relative; padding: clamp(20px, 3vw, 40px); border-radius: var(--rayon-grand); background: var(--nuit); overflow: hidden; }
+.visuel::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 80% 20%, rgba(136, 199, 59, .25), transparent 60%); }
+.visuel img { position: relative; border-radius: 14px; box-shadow: 0 30px 60px rgba(0, 0, 0, .4); }
+.visuel .duo { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 190px; gap: 20px; align-items: end; }
+.visuel .duo img:last-child { border-radius: 22px; }
+
+/* Les tarifs, en éventail sur la nuit */
+.eventail { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: end; padding-top: 30px; }
+.tarif {
+  position: relative; display: flex; flex-direction: column; padding: 30px; border-radius: 24px;
+  background: var(--nuit-2); border: 1px solid var(--trait-nuit); color: var(--sur-nuit); min-height: 540px;
+}
+.tarif:nth-child(1) { transform: rotate(-3deg) translateX(18px); }
+.tarif:nth-child(3) { transform: rotate(3deg) translateX(-18px); }
+.tarif.mis { z-index: 2; background: linear-gradient(180deg, #24331a, var(--nuit-2)); border: 2px solid var(--vert); min-height: 590px; box-shadow: 0 0 80px rgba(136, 199, 59, .18); }
+.tarif .haut-tarif { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--gris-nuit); font-variant-numeric: tabular-nums; }
+.tarif .favori { padding: 5px 10px; border-radius: 999px; background: var(--sur-nuit); color: var(--encre); font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.tarif h3 { font-size: 32px; margin: 22px 0 6px; }
+.tarif .pour { color: var(--gris-nuit); font-size: 15px; margin: 0; }
+.prix { display: block; font-size: clamp(42px, 4vw, 56px); margin: 28px 0 4px; }
+.prix-unite { color: var(--gris-nuit); font-size: 14px; }
+.tarif ul { list-style: none; padding: 22px 0 0; margin: 22px 0 28px; border-top: 1px solid var(--trait-nuit); display: grid; gap: 12px; flex: 1; font-size: 15px; align-content: start; }
+.tarif li { display: flex; gap: 10px; }
+.tarif li::before { content: "✓"; color: var(--vert); font-weight: 700; }
+.tarif .bouton { justify-content: space-between; width: 100%; }
+.tarif:not(.mis) .bouton { background: rgba(238, 243, 232, .1); color: var(--sur-nuit); }
+.tarif:not(.mis) .bouton .rond { background: rgba(238, 243, 232, .14); color: var(--sur-nuit); }
+.note-tarifs { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 46px; font-size: 13px; color: var(--gris-nuit); }
+.note-tarifs > span::before { content: "● "; color: var(--vert); }
+
+/* Les questions : une carte sombre à gauche, la liste numérotée à droite */
+.questions-deux { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.4fr); gap: 50px; align-items: start; }
+.carte-appel { position: sticky; top: 30px; padding: 32px; border-radius: 24px; background: var(--nuit); color: var(--sur-nuit); }
+.carte-appel h3 { font-size: 34px; margin-bottom: 14px; line-height: 1.05; }
+.carte-appel p { color: var(--gris-nuit); font-size: 15px; }
+.carte-appel .ecrire { margin-top: 18px; font-size: 14px; color: var(--gris-nuit); }
+.carte-appel .ecrire a { color: var(--sur-nuit); font-weight: 600; text-decoration-color: var(--vert); text-underline-offset: 3px; }
+.carte-appel .delai { margin-top: 10px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--gris-nuit); }
+.carte-appel .delai::before { content: "● "; color: var(--vert); }
+.liste-questions details { border-bottom: 1px solid var(--trait); }
+.liste-questions summary {
+  display: grid; grid-template-columns: 40px 1fr auto 40px; gap: 14px; align-items: center;
+  padding: 22px 0; cursor: pointer; list-style: none;
+}
+.liste-questions summary::-webkit-details-marker { display: none; }
+.liste-questions .num-q { font-size: 12px; color: var(--gris-texte); font-variant-numeric: tabular-nums; }
+.liste-questions .q { font: 800 clamp(19px, 1.8vw, 24px)/1.25 "Nexa Pro", sans-serif; letter-spacing: -.01em; }
+.liste-questions .categorie { padding: 4px 9px; border-radius: 6px; background: var(--creme-2); font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--gris-texte); }
+.liste-questions .ouvre { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 999px; border: 1px solid var(--trait); font-size: 18px; transition: transform .3s, background .3s; }
+.liste-questions details[open] .ouvre { transform: rotate(45deg); background: var(--vert); border-color: var(--vert); }
+.liste-questions .reponse { padding: 0 54px 24px; color: var(--gris-texte); max-width: 680px; margin: 0; }
+
+/* Le contact */
+.contact-deux { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 50px; align-items: start; }
+.coordonnees h2 { font-size: clamp(36px, 4vw, 56px); margin-bottom: 26px; }
+.coordonnees .ligne-coord { display: grid; grid-template-columns: 110px 1fr; gap: 14px; padding: 16px 0; border-top: 1px solid var(--trait); font-size: 16px; }
+.coordonnees .ligne-coord span { color: var(--gris-texte); font-size: 13px; letter-spacing: .04em; text-transform: uppercase; padding-top: 2px; }
+.coordonnees a { font-weight: 600; text-decoration-color: var(--vert); text-underline-offset: 3px; }
+.formulaire { padding: clamp(24px, 3vw, 40px); border-radius: 24px; background: var(--nuit); color: var(--sur-nuit); }
+.formulaire h3 { font-size: 30px; margin-bottom: 8px; }
+.formulaire > p { color: var(--gris-nuit); }
+.contact { display: grid; gap: 16px; margin-top: 24px; }
+.contact .rangee { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.contact label { display: block; font-size: 13px; color: var(--gris-nuit); margin-bottom: 8px; }
+.contact input, .contact textarea {
+  width: 100%; min-height: 52px; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--trait-nuit);
+  background: rgba(238, 243, 232, .06); color: var(--sur-nuit); font: inherit;
+}
+.contact textarea { min-height: 130px; resize: vertical; }
+.contact input:focus, .contact textarea:focus { outline: 0; border-color: var(--vert); background: rgba(238, 243, 232, .1); }
+.contact ::placeholder { color: rgba(238, 243, 232, .42); }
+.contact .bouton { justify-self: start; }
+.contact .aide { font-size: 13px; color: var(--gris-nuit); margin: 0; }
+
+/* ── l'appel final et le pied ────────────────────────────────────── */
+.appel-final { position: relative; overflow: hidden; text-align: center; padding: clamp(110px, 13vw, 180px) 0 clamp(90px, 10vw, 140px); }
+.appel-final .anneaux { position: absolute; left: 50%; top: 50%; width: min(1400px, 150vw); transform: translate(-50%, -50%); pointer-events: none; }
+.appel-final .anneaux circle { fill: none; stroke: rgba(136, 199, 59, .22); }
+.appel-final .contenu { position: relative; }
+.appel-final h2 { font-size: clamp(54px, 9vw, 150px); margin: 0 auto 26px; }
+.appel-final p { color: var(--gris-nuit); max-width: 520px; margin: 0 auto 34px; font-size: 18px; }
+.appel-final .boutons { display: flex; justify-content: center; flex-wrap: wrap; gap: 14px; }
+.pied { position: relative; overflow: hidden; background: var(--nuit); color: var(--sur-nuit); border-top: 1px solid var(--trait-nuit); padding-top: 60px; }
+.pied .colonnes { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 30px; }
+.pied .marque img { height: 36px; width: auto; margin-bottom: 18px; }
+.pied p { color: var(--gris-nuit); font-size: 15px; max-width: 320px; }
+.pied h4 { margin: 0 0 16px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--gris-nuit); font-weight: 600; }
+.pied .colonnes a { display: block; margin-bottom: 10px; text-decoration: none; font-size: 15px; }
+.pied .colonnes a:hover { color: var(--vert); }
+.pied .disponible { display: inline-flex; gap: 8px; align-items: center; margin-top: 8px; font-size: 13px; color: var(--gris-nuit); }
+.pied .disponible::before { content: ""; width: 8px; height: 8px; border-radius: 999px; background: var(--vert); }
+.nom-geant {
+  display: block; margin: 50px 0 -0.16em; text-align: center; white-space: nowrap;
+  font: 800 clamp(120px, 27vw, 420px)/.8 "Nexa Pro", sans-serif; letter-spacing: -.06em;
+  color: transparent; -webkit-text-stroke: 1.5px rgba(238, 243, 232, .2);
+  background: linear-gradient(180deg, rgba(238, 243, 232, .14), rgba(238, 243, 232, 0) 80%);
+  -webkit-background-clip: text; background-clip: text;
+}
+.pied .ligne-basse {
+  position: relative; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+  padding: 18px 0 26px; border-top: 1px solid var(--trait-nuit);
+  font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--gris-nuit);
+}
+.pied .ligne-basse a { text-decoration: none; margin-left: 18px; }
+
+/* ── le radar de l'en-tête ───────────────────────────────────────── */
+.fond-radar .anneau { fill: none; stroke: rgba(136, 199, 59, .2); }
+.fond-radar .croix { stroke: rgba(136, 199, 59, .12); }
+.fond-radar .balai { transform-origin: 300px 300px; animation: tour 8s linear infinite; }
+.fond-radar .echo circle { fill: var(--vert); }
+.fond-radar .echo text { fill: var(--sur-nuit); font: 600 11px "Inter", sans-serif; }
+.fond-radar .echo { opacity: .25; animation: echo 8s linear infinite; }
+.fond-radar .echo .halo { fill: none; stroke: var(--vert); stroke-width: 1.5; opacity: .6; }
+@keyframes echo { 0%, 6% { opacity: 1; } 55%, 100% { opacity: .25; } }
+
+/* ── le mouvement, pour qui n'en veut pas ────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .fond-radar .echo { opacity: 1; }
+  html { scroll-behavior: auto; }
+}
+
+/* ── le téléphone ────────────────────────────────────────────────── */
+@media (max-width: 980px) {
+  .menu { grid-template-columns: 1fr auto; }
+  .menu .liens { grid-column: 1 / -1; order: 3; justify-self: stretch; overflow-x: auto; }
+  .menu .liens a { white-space: nowrap; }
+  .heros { padding-top: 170px; }
+  .heros .fond-radar { right: -40vw; width: 130vw; opacity: .45; }
+  .heros-bas .contenu { grid-template-columns: minmax(0, 1fr); }
+  .puces { justify-content: flex-start; }
+  .note-heros { text-align: left; }
+  .tete-section, .deux-radar, .entonnoir-deux, .ecran, .ecran.inverse, .questions-deux, .contact-deux, .sous-comparaison { grid-template-columns: minmax(0, 1fr); }
+  .ecran.inverse .visuel { order: 0; }
+  .canaux { flex-direction: column; height: auto; }
+  .canal, .canal:has(input:checked) { flex: none; }
+  .canal { width: 100%; }
+  .canal label { flex: 1 1 auto; flex-direction: row; gap: 14px; padding: 16px 20px; min-height: 64px; }
+  .canal .nom-canal { flex: 1; }
+  .heros .fond-radar .echo text { display: none; }
+  .canal .nom-canal { writing-mode: horizontal-tb; transform: none; font-size: 22px; }
+  .canal .volet { grid-template-columns: minmax(0, 1fr); padding: 24px; }
+  .comparaison { aspect-ratio: 4 / 5; }
+  .cartes-chiffres { grid-template-columns: repeat(2, 1fr); }
+  .carte-chiffre:nth-child(2) { border-right: 0; }
+  .carte-chiffre:nth-child(-n+2) { border-bottom: 1px solid var(--trait-nuit); }
+  .eventail { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .tarif, .tarif.mis { transform: none !important; min-height: 0; }
+  .carte-appel { position: static; }
+  .pied .colonnes { grid-template-columns: 1fr 1fr; }
+  .visuel .duo { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 560px) {
+  .menu .bouton .texte-bouton { display: none; }
+  .menu .langue { padding: 4px; font-size: 0; gap: 0; }
+  .menu .bouton { padding-left: 6px; }
+  .liste-questions summary { grid-template-columns: 30px 1fr 34px; }
+  .liste-questions .categorie { display: none; }
+  .liste-questions .reponse { padding: 0 0 22px 44px; }
+  .contact .rangee { grid-template-columns: minmax(0, 1fr); }
+  .cartes-chiffres { grid-template-columns: minmax(0, 1fr); }
+  .carte-chiffre { border-right: 0; border-bottom: 1px solid var(--trait-nuit); }
+  .pied .colonnes { grid-template-columns: minmax(0, 1fr); }
+  .panneau-points { min-height: 440px; }
+  .comparaison .chiffre-cote b { font-size: 32px; }
+  .comparaison .chiffre-cote span { display: none; }
+  .comparaison .avant .chiffre-cote { left: 16px; }
+  .comparaison .apres .chiffre-cote { right: 16px; }
+  .menu .liens a { padding: 8px 11px; font-size: 13px; }
+  .panneau-points .etiq, .panneau-points .sous-etiq { display: none; }
+}
+
+/* ── À propos de Deilex ──────────────────────────────────────────── */
+.section.creme-2 { background: var(--creme-2); }
+.deux-apropos { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 60px; align-items: start; }
+.texte-apropos p { color: var(--gris-texte); font-size: 17px; max-width: 560px; }
+.texte-apropos .grand { color: var(--encre); font: 800 clamp(24px, 2.4vw, 32px)/1.2 "Nexa Pro", sans-serif; letter-spacing: -.01em; margin-bottom: 22px; }
+.texte-apropos .signature-deilex { margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--trait); font-size: 14px; color: var(--encre); font-weight: 600; }
+.sous-titre-apropos { color: var(--gris-texte); font-size: 17px; max-width: 460px; margin-top: 24px; }
+.piliers { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.pilier { padding: 28px; border-radius: 22px; background: var(--nuit-2); border: 1px solid var(--trait-nuit); display: flex; flex-direction: column; min-height: 320px; }
+.pilier:nth-child(2) { background: var(--vert); color: var(--encre); border-color: var(--vert); }
+.pilier .num-pilier { display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 999px; background: rgba(238, 243, 232, .1); font: 700 14px "Inter", sans-serif; margin-bottom: auto; }
+.pilier:nth-child(2) .num-pilier { background: var(--encre); color: var(--vert); }
+.pilier h3 { font-size: 26px; line-height: 1.05; margin: 40px 0 14px; }
+.pilier p { margin: 0; color: var(--gris-nuit); font-size: 15px; }
+.pilier:nth-child(2) p { color: rgba(9, 9, 9, .78); }
+.publics { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--trait); }
+.publics li { display: flex; align-items: center; gap: 22px; padding: 22px 0; border-bottom: 1px solid var(--trait); font: 800 clamp(24px, 2.6vw, 36px)/1.1 "Nexa Pro", sans-serif; letter-spacing: -.015em; }
+.publics li:first-child { color: var(--vert-texte); }
+.publics .rang { font: 600 13px "Inter", sans-serif; color: var(--gris-texte); letter-spacing: 0; min-width: 26px; }
+.zones { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.zone { padding: 26px; border-radius: 22px; background: #fff; border: 1px solid var(--trait); }
+.zone b { display: block; font: 800 clamp(36px, 3.4vw, 48px)/1 "Nexa Pro", sans-serif; letter-spacing: -.02em; margin-bottom: 14px; }
+.zone span { color: var(--gris-texte); font-size: 14px; }
+.naissance { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 60px; align-items: start; }
+.naissance p { color: var(--gris-texte); font-size: 17px; max-width: 540px; }
+.naissance .bouton { margin-top: 10px; }
+.coordonnees-deilex { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: clamp(50px, 6vw, 80px); border-radius: 22px; overflow: hidden; background: var(--nuit); color: var(--sur-nuit); }
+.coordonnees-deilex > div { padding: 24px 26px; border-right: 1px solid var(--trait-nuit); }
+.coordonnees-deilex > div:last-child { border-right: 0; }
+.coordonnees-deilex span { display: block; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--gris-nuit); margin-bottom: 10px; }
+.coordonnees-deilex b, .coordonnees-deilex a { font-size: 16px; font-weight: 600; color: var(--sur-nuit); text-decoration-color: var(--vert); text-underline-offset: 3px; }
+@media (max-width: 980px) {
+  .deux-apropos, .naissance { grid-template-columns: minmax(0, 1fr); gap: 30px; }
+  .piliers, .zones, .coordonnees-deilex { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .coordonnees-deilex > div:nth-child(2) { border-right: 0; }
+  .coordonnees-deilex > div:nth-child(-n+2) { border-bottom: 1px solid var(--trait-nuit); }
+  .pilier { min-height: 0; }
+}
+@media (max-width: 560px) {
+  .piliers, .zones, .coordonnees-deilex { grid-template-columns: minmax(0, 1fr); }
+  .coordonnees-deilex > div { border-right: 0; border-bottom: 1px solid var(--trait-nuit); }
+  .menu .liens a { padding: 8px; font-size: 12px; }
+}
+
+/* TÉLÉCHARGER (20/10/2026) : la carte sombre du téléchargement. */
+.carte-telecharger .boutons { margin-top: 24px; }
+.carte-telecharger .ecrire { margin-top: 22px; }
