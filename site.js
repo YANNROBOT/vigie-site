@@ -1,25 +1,16 @@
 /* ═══════════════════════════════════════════════════════════════════
    LE SITE WEB DE VIGIE — ce que le script ajoute, et rien de plus.
 
-   SANS LUI, TOUT SE LIT : les compteurs montrent leur valeur, la
-   comparaison s'arrête au milieu, l'entonnoir est rempli. Le script ne
-   fait qu'animer : les compteurs montent, la glissière suit le doigt,
-   l'entonnoir se remplit étage par étage quand on arrive dessus.
+   SANS LUI, TOUT SE LIT : les compteurs montrent leur valeur,
+   l'entonnoir est rempli, les textes sont là. Le script ne fait
+   qu'animer : les compteurs montent, l'entonnoir se remplit étage par
+   étage, les textes apparaissent quand on arrive dessus.
 
    Qui a demandé moins de mouvement à son appareil n'a pas d'animation.
    ═══════════════════════════════════════════════════════════════════ */
 (function () {
   "use strict";
   var calme = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  /* --- la glissière avant / avec Vigie ------------------------------ */
-  document.querySelectorAll(".comparaison").forEach(function (boite) {
-    var glisse = boite.querySelector("input[type=range]");
-    if (!glisse) { return; }
-    function poser() { boite.style.setProperty("--pos", glisse.value + "%"); }
-    glisse.addEventListener("input", poser);
-    poser();
-  });
 
   if (calme || !("IntersectionObserver" in window)) { return; }
 
@@ -57,6 +48,27 @@
       if (i < Math.max(pas.length, etages.length)) { setTimeout(suivant, 650); }
     })();
   }
+
+  /* --- les textes qui apparaissent (20/10/2026) ----------------------
+     Le script marque lui-même ce qui apparaîtra : sans lui, rien n'est
+     caché. Un titre, son texte et ses boutons arrivent l'un après
+     l'autre. */
+  document.documentElement.classList.add("js-revele");
+  var revele = new IntersectionObserver(function (entrees) {
+    entrees.forEach(function (e) {
+      if (!e.isIntersecting) { return; }
+      revele.unobserve(e.target);
+      e.target.classList.add("vu");
+    });
+  }, {threshold: 0.15});
+  document.querySelectorAll("main :is(h1, h2, .chapeau, .tete-section > p, .texte > p, .boutons, .deux-radar svg, .onglets-ecrans, .ecran, .tarif, .carte-appel, .matinee)")
+    .forEach(function (el) {
+      var rang = 0, avant = el.previousElementSibling;
+      while (avant && rang < 3) { rang += 1; avant = avant.previousElementSibling; }
+      el.style.setProperty("--rang", rang);
+      el.classList.add("a-reveler");
+      revele.observe(el);
+    });
 
   var vus = new IntersectionObserver(function (entrees) {
     entrees.forEach(function (e) {
