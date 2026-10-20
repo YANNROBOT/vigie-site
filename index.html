@@ -15,9 +15,9 @@
 <body>
 <nav class="menu" aria-label="Pages du site">
   <a href="index.html" class="marque"><img src="images/logo-vigie-nuit.svg" alt="Vigie, accueil"></a>
-  <div class="liens"><a href="logiciel.html">Le logiciel</a><a href="tarifs.html">Tarifs</a><a href="questions.html">Questions</a><a href="a-propos.html">À propos</a><a href="contact.html">Contact</a><a href="telecharger.html">Télécharger</a></div>
-  <div class="droite"><a class="langue" href="en/index.html" hreflang="en" lang="en">English<b>EN</b></a>
-  <a class="bouton vert" href="contact.html"><span class="texte-bouton">Demander une démo</span><span class="rond"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 10h16M9 3.5v4M15 3.5v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></a></div>
+  <div class="liens"><a href="index.html" aria-current="page">Accueil</a><a href="logiciel.html">Le logiciel</a><a href="tarifs.html">Tarifs</a><a href="questions.html">Questions</a><a href="a-propos.html">À propos</a><a href="contact.html">Contact</a></div>
+  <div class="droite"><a class="bouton vert" href="telecharger.html"><span class="texte-bouton">Télécharger</span><span class="rond"><span class="ic" aria-hidden="true"><i class="v" style="--p:url('images/icones/telecharger-vert.svg')"></i><i class="e" style="--p:url('images/icones/telecharger-encre.svg')"></i></span></span></a>
+  <a class="langue" href="en/index.html" hreflang="en" lang="en" aria-label="English"><img src="images/drapeau-gb.svg" alt=""></a></div>
 </nav>
 <main>
 <header class="heros">
@@ -36,12 +36,12 @@
     <span class="badge">Le relevé de ce matin est prêt : 12 signaux, 3 retenus</span>
     <h1>Ce qui compte, <mark>trouvé</mark> chaque <mark>matin.</mark></h1>
     <p class="chapeau">Vigie lit les journaux officiels, les portails de marchés et les bailleurs, garde ce qui touche votre cabinet et prépare vos publications. Il ne vous reste qu'à valider.</p>
-    <div class="boutons"><a class="bouton" href="contact.html">Demander une démonstration<span class="rond"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 10h16M9 3.5v4M15 3.5v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></a>
-      <a class="bouton verre" href="telecharger.html">Télécharger Vigie<span class="rond"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v12M6.5 10.5 12 16l5.5-5.5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
+    <div class="boutons"><a class="bouton vert" href="telecharger.html">Télécharger Vigie<span class="rond"><span class="ic" aria-hidden="true"><i class="v" style="--p:url('images/icones/telecharger-vert.svg')"></i><i class="e" style="--p:url('images/icones/telecharger-encre.svg')"></i></span></span></a>
+      <a class="bouton verre" href="contact.html">Demander une démonstration<span class="rond"><span class="ic" aria-hidden="true"><i class="v" style="--p:url('images/icones/planning-vert.svg')"></i><i class="e" style="--p:url('images/icones/planning-encre.svg')"></i></span></span></a></div>
   </div>
   <div class="heros-bas"><div class="contenu">
     <div class="compteur"><span>Signaux lus pour nos cabinets ce mois-ci</span><b data-compte="12480">12 480</b></div>
-    <div class="puces"><a class="puce" href="logiciel.html"><b>01</b>Publications</a><a class="puce" href="logiciel.html"><b>02</b>Appels d'offres</a><a class="puce" href="logiciel.html"><b>03</b>Planning</a><a class="puce" href="logiciel.html"><b>04</b>Équipe</a></div>
+    <div class="puces"><a class="puce" href="logiciel.html"><span class="ic" aria-hidden="true"><i class="v" style="--p:url('images/icones/publications-vert.svg')"></i><i class="e" style="--p:url('images/icones/publications-encre.svg')"></i></span>Publications</a><a class="puce" href="logiciel.html"><span class="ic" aria-hidden="true"><i class="v" style="--p:url('images/icones/appels-offres-vert.svg')"></i><i class="e" style="--p:url('images/icones/appels-offres-encre.svg')"></i></span>Appels d'offres</a><a class="puce" href="logiciel.html"><span class="ic" aria-hidden="true"><i class="v" style="--p:url('images/icones/planning-vert.svg')"></i><i class="e" style="--p:url('images/icones/planning-encre.svg')"></i></span>Planning</a><a class="puce" href="logiciel.html"><span class="ic" aria-hidden="true"><i class="v" style="--p:url('images/icones/equipe-vert.svg')"></i><i class="e" style="--p:url('images/icones/equipe-encre.svg')"></i></span>Équipe</a></div>
     <div class="note-heros"><b>38 sources</b> suivies<br>relevé chaque jour à <b>6 h 30</b></div>
   </div></div>
 </header>
@@ -84,57 +84,31 @@
   <div class="tete-section"><div><span class="etiquette">(02) Le logiciel</span>
     <h2>Six écrans. <mark>Un seul</mark> matin.</h2></div>
     <p>Le relevé, les fiches, les publications, les appels d'offres, le planning et les messages, dans le même logiciel, pour toute l'équipe.</p></div>
-  <div class="canaux" role="group" aria-label="Les parties du logiciel"><div class="canal">
-  <input type="radio" name="c-canal" id="c0" checked>
-  <label for="c0" class="t-sombre"><span class="num">01</span><span class="nom-canal">Le relevé</span><span class="plus" aria-hidden="true">+</span></label>
-  <div class="volet">
-    <div><span class="num-volet">01</span><h3>Le relevé du matin</h3><p>À l'heure que vous choisissez, Vigie a lu vos sources et trié. L'accueil dit ce qui attend.</p><ul><li>À valider, en un coup d'œil</li><li>Appels d'offres en cours</li><li>Ce que l'équipe a fait hier</li></ul>
-      <a class="bouton" href="logiciel.html">Voir l'écran<span class="rond"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
-    <div class="apercu"><img src="images/ecran-accueil.png" alt="Le relevé du matin, dans Vigie (données inventées)" loading="lazy"></div>
-  </div>
-</div><div class="canal">
-  <input type="radio" name="c-canal" id="c1" >
-  <label for="c1" class="t-blanc"><span class="num">02</span><span class="nom-canal">Les fiches</span><span class="plus" aria-hidden="true">+</span></label>
-  <div class="volet">
-    <div><span class="num-volet">02</span><h3>Une fiche par signal</h3><p>Le titre, la source, la note sur 100 et la synthèse. Votre équipe y écrit le post et en parle.</p><ul><li>Brouillon proposé par Vigie</li><li>Déclinaison par réseau</li><li>Conversation de l'équipe</li></ul>
-      <a class="bouton" href="logiciel.html">Voir l'écran<span class="rond"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
-    <div class="apercu telephone"><img src="images/telephone-fiche.png" alt="Une fiche par signal, dans Vigie (données inventées)" loading="lazy"></div>
-  </div>
-</div><div class="canal">
-  <input type="radio" name="c-canal" id="c2" >
-  <label for="c2" class="t-creme"><span class="num">03</span><span class="nom-canal">Publications</span><span class="plus" aria-hidden="true">+</span></label>
-  <div class="volet">
-    <div><span class="num-volet">03</span><h3>Les publications</h3><p>Toutes les fiches, du brouillon à la publication. Vous voyez ce qui attend votre validation.</p><ul><li>Filtres par statut</li><li>Validation en un clic</li><li>Partage vers vos réseaux</li></ul>
-      <a class="bouton" href="logiciel.html">Voir l'écran<span class="rond"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
-    <div class="apercu"><img src="images/ecran-publications.png" alt="Les publications, dans Vigie (données inventées)" loading="lazy"></div>
-  </div>
-</div><div class="canal">
-  <input type="radio" name="c-canal" id="c3" >
-  <label for="c3" class="t-vert"><span class="num">04</span><span class="nom-canal">Appels d'offres</span><span class="plus" aria-hidden="true">+</span></label>
-  <div class="volet">
-    <div><span class="num-volet">04</span><h3>Les appels d'offres</h3><p>Les avis de marchés et des bailleurs qui touchent vos métiers, avec leur date limite.</p><ul><li>Portail des marchés publics</li><li>Banque mondiale, Union européenne</li><li>Suivi de chaque affaire</li></ul>
-      <a class="bouton" href="logiciel.html">Voir l'écran<span class="rond"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
-    <div class="apercu"><img src="images/ecran-appels.png" alt="Les appels d'offres, dans Vigie (données inventées)" loading="lazy"></div>
-  </div>
-</div><div class="canal">
-  <input type="radio" name="c-canal" id="c4" >
-  <label for="c4" class="t-sombre"><span class="num">05</span><span class="nom-canal">Planning</span><span class="plus" aria-hidden="true">+</span></label>
-  <div class="volet">
-    <div><span class="num-volet">05</span><h3>Le planning</h3><p>La semaine en sept colonnes, une carte par publication, l'heure et le réseau dessus.</p><ul><li>Ajout en un clic</li><li>Filtres par réseau</li><li>Impression en PDF</li></ul>
-      <a class="bouton" href="logiciel.html">Voir l'écran<span class="rond"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
-    <div class="apercu"><img src="images/ecran-planning.png" alt="Le planning, dans Vigie (données inventées)" loading="lazy"></div>
-  </div>
-</div><div class="canal">
-  <input type="radio" name="c-canal" id="c5" >
-  <label for="c5" class="t-blanc"><span class="num">06</span><span class="nom-canal">Messages</span><span class="plus" aria-hidden="true">+</span></label>
-  <div class="volet">
-    <div><span class="num-volet">06</span><h3>Les messages</h3><p>Une conversation par personne de l'équipe. Les mentions faites sous une fiche y arrivent aussi.</p><ul><li>Sur téléphone comme au bureau</li><li>Mentions avec lien vers la fiche</li><li>Chacun ne lit que ses messages</li></ul>
-      <a class="bouton" href="logiciel.html">Voir l'écran<span class="rond"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
-    <div class="apercu telephone"><img src="images/telephone-messages.png" alt="Les messages, dans Vigie (données inventées)" loading="lazy"></div>
-  </div>
-</div></div>
-  <div class="pied-canaux"><span>Cliquez sur une colonne pour l'ouvrir.</span>
-    <a href="logiciel.html">Tous les écrans, un par un</a></div>
+  <div class="onglets-ecrans"><input type="radio" name="c-onglet" id="co0" checked><input type="radio" name="c-onglet" id="co1"><input type="radio" name="c-onglet" id="co2"><input type="radio" name="c-onglet" id="co3"><input type="radio" name="c-onglet" id="co4"><input type="radio" name="c-onglet" id="co5"><div class="barre-onglets" role="group" aria-label="Les parties du logiciel"><label for="co0"><span class="ic" aria-hidden="true"><i class="v" style="--p:url('images/icones/accueil-vert.svg')"></i><i class="e" style="--p:url('images/icones/accueil-encre.svg')"></i></span><span>Le relevé</span></label><label for="co1"><span class="ic" aria-hidden="true"><i class="v" style="--p:url('images/icones/document-vert.svg')"></i><i class="e" style="--p:url('images/icones/document-encre.svg')"></i></span><span>Les fiches</span></label><label for="co2"><span class="ic" aria-hidden="true"><i class="v" style="--p:url('images/icones/publications-vert.svg')"></i><i class="e" style="--p:url('images/icones/publications-encre.svg')"></i></span><span>Publications</span></label><label for="co3"><span class="ic" aria-hidden="true"><i class="v" style="--p:url('images/icones/appels-offres-vert.svg')"></i><i class="e" style="--p:url('images/icones/appels-offres-encre.svg')"></i></span><span>Appels d'offres</span></label><label for="co4"><span class="ic" aria-hidden="true"><i class="v" style="--p:url('images/icones/planning-vert.svg')"></i><i class="e" style="--p:url('images/icones/planning-encre.svg')"></i></span><span>Planning</span></label><label for="co5"><span class="ic" aria-hidden="true"><i class="v" style="--p:url('images/icones/messages-vert.svg')"></i><i class="e" style="--p:url('images/icones/messages-encre.svg')"></i></span><span>Messages</span></label></div><div class="panneaux-onglets"><article class="panneau-onglet">
+  <div class="texte-onglet"><span class="num-onglet">01</span><h3>Le relevé du matin</h3><p>À l'heure que vous choisissez, Vigie a lu vos sources et trié. L'accueil dit ce qui attend.</p><ul><li>À valider, en un coup d'œil</li><li>Appels d'offres en cours</li><li>Ce que l'équipe a fait hier</li></ul><a class="bouton vert" href="logiciel.html">Voir tous les écrans<span class="rond"><span class="ic" aria-hidden="true"><i class="v" style="--p:url('images/icones/appareils-vert.svg')"></i><i class="e" style="--p:url('images/icones/appareils-encre.svg')"></i></span></span></a></div>
+  <div class="cadre-onglet"><img src="images/ecran-accueil.png" alt="Le relevé du matin, dans Vigie (données inventées)" loading="lazy">
+    <img class="tel" src="images/telephone-accueil.png" alt="" loading="lazy"></div>
+</article><article class="panneau-onglet">
+  <div class="texte-onglet"><span class="num-onglet">02</span><h3>Une fiche par signal</h3><p>Le titre, la source, la note sur 100 et la synthèse. Votre équipe y écrit le post et en parle.</p><ul><li>Brouillon proposé par Vigie</li><li>Déclinaison par réseau</li><li>Conversation de l'équipe</li></ul><a class="bouton vert" href="logiciel.html">Voir tous les écrans<span class="rond"><span class="ic" aria-hidden="true"><i class="v" style="--p:url('images/icones/appareils-vert.svg')"></i><i class="e" style="--p:url('images/icones/appareils-encre.svg')"></i></span></span></a></div>
+  <div class="cadre-onglet"><img src="images/ecran-fiche.png" alt="Une fiche par signal, dans Vigie (données inventées)" loading="lazy">
+    <img class="tel" src="images/telephone-fiche.png" alt="" loading="lazy"></div>
+</article><article class="panneau-onglet">
+  <div class="texte-onglet"><span class="num-onglet">03</span><h3>Les publications</h3><p>Toutes les fiches, du brouillon à la publication. Vous voyez ce qui attend votre validation.</p><ul><li>Filtres par statut</li><li>Validation en un clic</li><li>Partage vers vos réseaux</li></ul><a class="bouton vert" href="logiciel.html">Voir tous les écrans<span class="rond"><span class="ic" aria-hidden="true"><i class="v" style="--p:url('images/icones/appareils-vert.svg')"></i><i class="e" style="--p:url('images/icones/appareils-encre.svg')"></i></span></span></a></div>
+  <div class="cadre-onglet"><img src="images/ecran-publications.png" alt="Les publications, dans Vigie (données inventées)" loading="lazy">
+    <img class="tel" src="images/telephone-publications.png" alt="" loading="lazy"></div>
+</article><article class="panneau-onglet">
+  <div class="texte-onglet"><span class="num-onglet">04</span><h3>Les appels d'offres</h3><p>Les avis de marchés et des bailleurs qui touchent vos métiers, avec leur date limite.</p><ul><li>Portail des marchés publics</li><li>Banque mondiale, Union européenne</li><li>Suivi de chaque affaire</li></ul><a class="bouton vert" href="logiciel.html">Voir tous les écrans<span class="rond"><span class="ic" aria-hidden="true"><i class="v" style="--p:url('images/icones/appareils-vert.svg')"></i><i class="e" style="--p:url('images/icones/appareils-encre.svg')"></i></span></span></a></div>
+  <div class="cadre-onglet"><img src="images/ecran-appels.png" alt="Les appels d'offres, dans Vigie (données inventées)" loading="lazy">
+    <img class="tel" src="images/telephone-appels.png" alt="" loading="lazy"></div>
+</article><article class="panneau-onglet">
+  <div class="texte-onglet"><span class="num-onglet">05</span><h3>Le planning</h3><p>La semaine en sept colonnes, une carte par publication, l'heure et le réseau dessus.</p><ul><li>Ajout en un clic</li><li>Filtres par réseau</li><li>Impression en PDF</li></ul><a class="bouton vert" href="logiciel.html">Voir tous les écrans<span class="rond"><span class="ic" aria-hidden="true"><i class="v" style="--p:url('images/icones/appareils-vert.svg')"></i><i class="e" style="--p:url('images/icones/appareils-encre.svg')"></i></span></span></a></div>
+  <div class="cadre-onglet"><img src="images/ecran-planning.png" alt="Le planning, dans Vigie (données inventées)" loading="lazy">
+    <img class="tel" src="images/telephone-planning.png" alt="" loading="lazy"></div>
+</article><article class="panneau-onglet">
+  <div class="texte-onglet"><span class="num-onglet">06</span><h3>Les messages</h3><p>Une conversation par personne de l'équipe. Les mentions faites sous une fiche y arrivent aussi.</p><ul><li>Sur téléphone comme au bureau</li><li>Mentions avec lien vers la fiche</li><li>Chacun ne lit que ses messages</li></ul><a class="bouton vert" href="logiciel.html">Voir tous les écrans<span class="rond"><span class="ic" aria-hidden="true"><i class="v" style="--p:url('images/icones/appareils-vert.svg')"></i><i class="e" style="--p:url('images/icones/appareils-encre.svg')"></i></span></span></a></div>
+  <div class="cadre-onglet"><img src="images/ecran-messages.png" alt="Les messages, dans Vigie (données inventées)" loading="lazy">
+    <img class="tel" src="images/telephone-messages.png" alt="" loading="lazy"></div>
+</article></div></div>
 </div></section>
 
 <section class="section nuit"><div class="contenu">
@@ -187,8 +161,8 @@
     <span class="etiquette">Démonstration offerte</span>
     <h2>Prêt à tout <mark>voir</mark> ?</h2>
     <p>Trente minutes, sur vos propres sources. Vous voyez ce que Vigie aurait trouvé pour votre cabinet ce matin.</p>
-    <div class="boutons"><a class="bouton vert" href="contact.html">Demander une démonstration<span class="rond"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 10h16M9 3.5v4M15 3.5v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></a>
-      <a class="bouton verre" href="logiciel.html">Voir le logiciel<span class="rond"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
+    <div class="boutons"><a class="bouton vert" href="contact.html">Demander une démonstration<span class="rond"><span class="ic" aria-hidden="true"><i class="v" style="--p:url('images/icones/planning-vert.svg')"></i><i class="e" style="--p:url('images/icones/planning-encre.svg')"></i></span></span></a>
+      <a class="bouton verre" href="logiciel.html">Voir le logiciel<span class="rond"><span class="ic" aria-hidden="true"><i class="v" style="--p:url('images/icones/appareils-vert.svg')"></i><i class="e" style="--p:url('images/icones/appareils-encre.svg')"></i></span></span></a></div>
   </div>
 </section>
 </main>

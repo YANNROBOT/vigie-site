@@ -36,9 +36,11 @@
   --vert-clair: #b4e07a;
   --vert-texte: #457a18;
   --encre: #090909;
-  --nuit: #10180a;
-  --nuit-2: #162011;
-  --nuit-3: #1d2716;
+  /* NOIR, PLUS VERT SOMBRE (directeur, 20/10/2026 : « les fonds vert
+     sombre des arrière-plans, en noir »). */
+  --nuit: #0a0a0a;
+  --nuit-2: #141414;
+  --nuit-3: #1c1c1c;
   --sur-nuit: #eef3e8;
   --gris-nuit: rgba(238, 243, 232, .64);
   --creme: #eef0e8;
@@ -63,8 +65,10 @@ h1, h2, h3, .prix, .grand-nombre {
   font-family: "Nexa Pro", "Inter", sans-serif; font-weight: 800;
   letter-spacing: -.025em; line-height: 1; margin: 0;
 }
-h1 { font-size: clamp(48px, 8.4vw, 128px); }
-h2 { font-size: clamp(40px, 5.6vw, 84px); }
+/* Réduits le 20/10/2026 (directeur : « réduis les grands titres, c'est
+   trop gros ») : un bon tiers de moins. */
+h1 { font-size: clamp(40px, 6vw, 88px); }
+h2 { font-size: clamp(32px, 4.2vw, 60px); }
 h3 { font-size: 22px; letter-spacing: -.01em; }
 p { margin: 0 0 1em; }
 a { color: inherit; }
@@ -72,11 +76,11 @@ img { max-width: 100%; display: block; }
 .contenu { max-width: var(--largeur); margin: 0 auto; padding-inline: var(--marge); }
 :focus-visible { outline: 3px solid var(--vert); outline-offset: 3px; border-radius: 6px; }
 
-/* LE SURLIGNAGE : des blocs verts derrière les mots, comme la référence. */
-mark {
-  background: var(--vert); color: var(--encre); padding: 0 .12em; margin: 0 .02em;
-  border-radius: .14em; -webkit-box-decoration-break: clone; box-decoration-break: clone;
-}
+/* LES MOTS EN VERT, sans cadre (directeur, 20/10/2026 : « enlève les
+   contours, mets le texte en vert »). Sur le clair, le vert d'écriture,
+   plus foncé, pour se lire ; sur le noir, le vert de la marque. */
+mark { background: none; color: var(--vert-texte); padding: 0; }
+.nuit mark, .heros mark, .appel-final mark, .pied mark { color: var(--vert); }
 
 /* L'ÉTIQUETTE « (01) … » au-dessus des titres. */
 .etiquette {
@@ -126,13 +130,14 @@ mark {
 .menu .liens a[aria-current="page"] { background: var(--vert); color: var(--encre); }
 .menu .droite { justify-self: end; display: flex; align-items: center; gap: 10px; }
 .menu .bouton { min-height: 46px; }
-/* LE CHANGEMENT DE LANGUE : la langue d'arrivée, écrite dans sa langue. */
+/* LE CHANGEMENT DE LANGUE : un simple cercle, le drapeau de la langue
+   d'arrivée dedans, APRÈS le bouton (directeur, 20/10/2026). Son nom est
+   dit aux lecteurs d'écran (aria-label). */
 .menu .langue {
-  display: inline-flex; align-items: center; gap: 8px; padding: 6px 6px 6px 14px; border-radius: 999px;
-  border: 1px solid var(--trait-nuit); background: rgba(238, 243, 232, .06); color: var(--sur-nuit);
-  font: 500 13px/1 "Inter", sans-serif; text-decoration: none;
+  display: grid; place-items: center; width: 46px; height: 46px; padding: 0; border-radius: 50%;
+  overflow: hidden; border: 2px solid var(--trait-nuit); flex: none;
 }
-.menu .langue b { display: grid; place-items: center; min-width: 30px; height: 30px; border-radius: 999px; background: rgba(238, 243, 232, .14); font-size: 12px; font-weight: 700; }
+.menu .langue img { width: 100%; height: 100%; object-fit: cover; }
 .menu .langue:hover { border-color: var(--vert); }
 .menu .bouton .rond { width: 34px; height: 34px; }
 
@@ -141,9 +146,7 @@ mark {
 .heros {
   position: relative; overflow: hidden; min-height: 100vh; min-height: 100svh;
   display: flex; flex-direction: column; justify-content: center; padding: 130px 0 0;
-  background:
-    radial-gradient(ellipse 70% 60% at 72% 50%, rgba(136, 199, 59, .14), transparent 70%),
-    var(--nuit);
+  background: var(--nuit);
   color: var(--sur-nuit);
 }
 .heros .fond-radar {
@@ -180,7 +183,7 @@ mark {
 
 /* L'en-tête des pages intérieures : plus court, même nuit. */
 .heros.court { min-height: 0; padding: 170px 0 100px; }
-.heros.court h1 { max-width: 14ch; font-size: clamp(46px, 7vw, 108px); }
+.heros.court h1 { max-width: 16ch; font-size: clamp(38px, 5.4vw, 80px); }
 .heros.court .fond-radar { width: min(820px, 80vw); right: -14vw; opacity: .6; }
 
 /* ── les sections ────────────────────────────────────────────────── */
@@ -226,43 +229,7 @@ mark {
 .panneau-points .legende-points .grand-nombre small { font-size: .32em; color: var(--sur-nuit); margin-right: .2em; }
 .panneau-points .legende-points p { font: 800 clamp(22px, 2.4vw, 32px)/1.1 "Nexa Pro", sans-serif; margin: 6px 0 0; }
 
-/* (02) Les colonnes verticales qui s'ouvrent */
-.canaux { display: flex; gap: 12px; height: 580px; }
-.canal { position: relative; display: flex; flex: 0 0 92px; transition: flex .5s cubic-bezier(.3, .7, .2, 1); }
-.canal:has(input:checked) { flex: 1 1 auto; }
-.canal input { position: absolute; opacity: 0; pointer-events: none; }
-.canal label {
-  flex: 0 0 92px; display: flex; flex-direction: column; justify-content: space-between; align-items: center;
-  padding: 18px 0; border-radius: 22px; cursor: pointer; overflow: hidden;
-  background: var(--t-fond, var(--nuit)); color: var(--t-texte, var(--sur-nuit));
-  border: 1px solid var(--t-bord, transparent);
-}
-.canal .num { font: 600 12px "Inter", sans-serif; opacity: .7; font-variant-numeric: tabular-nums; }
-.canal .nom-canal { writing-mode: vertical-rl; transform: rotate(180deg); font: 800 28px/1 "Nexa Pro", sans-serif; letter-spacing: -.01em; white-space: nowrap; }
-.canal .plus { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 999px; border: 1px solid currentColor; font: 400 20px/1 "Inter", sans-serif; opacity: .8; }
-.canal input:checked + label { display: none; }
-.canal input:focus-visible + label { outline: 3px solid var(--vert); outline-offset: 3px; }
-.canal .volet {
-  display: none; flex: 1; grid-template-columns: minmax(0, .9fr) minmax(0, 1.2fr); gap: 34px; align-items: center;
-  padding: 34px; border-radius: 22px; background: var(--vert); color: var(--encre); overflow: hidden;
-  animation: ouvrir .45s ease both;
-}
-.canal input:checked ~ .volet { display: grid; }
 @keyframes ouvrir { from { opacity: 0; transform: translateX(14px); } }
-.volet .num-volet { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 999px; background: var(--encre); color: var(--vert); font: 700 13px "Inter", sans-serif; margin-bottom: 22px; }
-.volet h3 { font-size: clamp(34px, 3.6vw, 52px); letter-spacing: -.025em; margin-bottom: 18px; line-height: 1; }
-.volet p { font-size: 16px; max-width: 360px; }
-.volet ul { list-style: none; padding: 0; margin: 18px 0 26px; display: grid; gap: 9px; font-size: 15px; }
-.volet li { display: flex; gap: 10px; align-items: center; }
-.volet li::before { content: "✓"; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 999px; background: var(--encre); color: var(--vert); font-size: 11px; font-weight: 700; flex: none; }
-.volet .apercu { align-self: stretch; display: flex; align-items: center; justify-content: center; min-height: 0; }
-.volet .apercu img { width: 100%; border-radius: 14px; box-shadow: 0 30px 60px rgba(9, 9, 9, .28); }
-.volet .apercu.telephone img { width: auto; max-width: 250px; max-height: 500px; border-radius: 26px; }
-.pied-canaux { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; align-items: center; margin-top: 22px; font-size: 13px; color: var(--gris-texte); }
-.t-sombre { --t-fond: var(--nuit); --t-texte: var(--sur-nuit); }
-.t-blanc { --t-fond: #fff; --t-texte: var(--encre); --t-bord: var(--trait); }
-.t-creme { --t-fond: var(--creme-2); --t-texte: var(--encre); }
-.t-vert { --t-fond: var(--vert-clair); --t-texte: var(--encre); }
 
 /* (03) Avant / avec Vigie : la glissière */
 .comparaison {
@@ -273,7 +240,7 @@ mark {
 .comparaison .couche img { width: 100%; height: 100%; object-fit: cover; object-position: top left; }
 .comparaison .avant img { filter: grayscale(1) brightness(.42) blur(1.5px); }
 .comparaison .apres { clip-path: inset(0 0 0 var(--pos)); }
-.comparaison .apres::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent 35%, rgba(16, 24, 10, .62)); pointer-events: none; }
+.comparaison .apres::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent 35%, rgba(10, 10, 10, .62)); pointer-events: none; }
 .comparaison .trait {
   position: absolute; top: 0; bottom: 0; left: var(--pos); width: 2px; margin-left: -1px;
   background: var(--vert); pointer-events: none; z-index: 3;
@@ -281,7 +248,7 @@ mark {
 .comparaison .poignee {
   position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
   display: grid; place-items: center; width: 54px; height: 54px; border-radius: 999px;
-  background: rgba(16, 24, 10, .75); border: 2px solid var(--vert); color: var(--vert); font-weight: 700; font-size: 14px;
+  background: rgba(10, 10, 10, .75); border: 2px solid var(--vert); color: var(--vert); font-weight: 700; font-size: 14px;
 }
 .comparaison input[type="range"] {
   position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; z-index: 4;
@@ -357,13 +324,12 @@ mark {
 .ecran.inverse { grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); }
 .ecran.inverse .visuel { order: -1; }
 .ecran .num-ecran { font: 600 13px "Inter", sans-serif; color: var(--gris-texte); margin-bottom: 14px; font-variant-numeric: tabular-nums; }
-.ecran h2 { font-size: clamp(36px, 4.4vw, 64px); margin-bottom: 22px; }
+.ecran h2 { font-size: clamp(30px, 3.2vw, 46px); margin-bottom: 22px; }
 .ecran p { font-size: 18px; color: var(--gris-texte); max-width: 470px; }
 .ecran ul { list-style: none; padding: 0; margin: 24px 0 0; display: grid; gap: 10px; }
 .ecran li { display: flex; gap: 10px; align-items: center; }
 .ecran li::before { content: "✓"; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 999px; background: var(--vert); color: var(--encre); font-size: 12px; font-weight: 700; flex: none; }
 .visuel { position: relative; padding: clamp(20px, 3vw, 40px); border-radius: var(--rayon-grand); background: var(--nuit); overflow: hidden; }
-.visuel::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 80% 20%, rgba(136, 199, 59, .25), transparent 60%); }
 .visuel img { position: relative; border-radius: 14px; box-shadow: 0 30px 60px rgba(0, 0, 0, .4); }
 .visuel .duo { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 190px; gap: 20px; align-items: end; }
 .visuel .duo img:last-child { border-radius: 22px; }
@@ -376,7 +342,7 @@ mark {
 }
 .tarif:nth-child(1) { transform: rotate(-3deg) translateX(18px); }
 .tarif:nth-child(3) { transform: rotate(3deg) translateX(-18px); }
-.tarif.mis { z-index: 2; background: linear-gradient(180deg, #24331a, var(--nuit-2)); border: 2px solid var(--vert); min-height: 590px; box-shadow: 0 0 80px rgba(136, 199, 59, .18); }
+.tarif.mis { z-index: 2; background: linear-gradient(180deg, #1f1f1f, var(--nuit-2)); border: 2px solid var(--vert); min-height: 590px; box-shadow: 0 0 80px rgba(136, 199, 59, .18); }
 .tarif .haut-tarif { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--gris-nuit); font-variant-numeric: tabular-nums; }
 .tarif .favori { padding: 5px 10px; border-radius: 999px; background: var(--sur-nuit); color: var(--encre); font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
 .tarif h3 { font-size: 32px; margin: 22px 0 6px; }
@@ -441,7 +407,7 @@ mark {
 .appel-final .anneaux { position: absolute; left: 50%; top: 50%; width: min(1400px, 150vw); transform: translate(-50%, -50%); pointer-events: none; }
 .appel-final .anneaux circle { fill: none; stroke: rgba(136, 199, 59, .22); }
 .appel-final .contenu { position: relative; }
-.appel-final h2 { font-size: clamp(54px, 9vw, 150px); margin: 0 auto 26px; }
+.appel-final h2 { font-size: clamp(44px, 6.6vw, 100px); margin: 0 auto 26px; }
 .appel-final p { color: var(--gris-nuit); max-width: 520px; margin: 0 auto 34px; font-size: 18px; }
 .appel-final .boutons { display: flex; justify-content: center; flex-wrap: wrap; gap: 14px; }
 .pied { position: relative; overflow: hidden; background: var(--nuit); color: var(--sur-nuit); border-top: 1px solid var(--trait-nuit); padding-top: 60px; }
@@ -455,7 +421,7 @@ mark {
 .pied .disponible::before { content: ""; width: 8px; height: 8px; border-radius: 999px; background: var(--vert); }
 .nom-geant {
   display: block; margin: 50px 0 -0.16em; text-align: center; white-space: nowrap;
-  font: 800 clamp(120px, 27vw, 420px)/.8 "Nexa Pro", sans-serif; letter-spacing: -.06em;
+  font: 800 clamp(100px, 20vw, 320px)/.8 "Nexa Pro", sans-serif; letter-spacing: -.06em;
   color: transparent; -webkit-text-stroke: 1.5px rgba(238, 243, 232, .2);
   background: linear-gradient(180deg, rgba(238, 243, 232, .14), rgba(238, 243, 232, 0) 80%);
   -webkit-background-clip: text; background-clip: text;
@@ -496,14 +462,7 @@ mark {
   .note-heros { text-align: left; }
   .tete-section, .deux-radar, .entonnoir-deux, .ecran, .ecran.inverse, .questions-deux, .contact-deux, .sous-comparaison { grid-template-columns: minmax(0, 1fr); }
   .ecran.inverse .visuel { order: 0; }
-  .canaux { flex-direction: column; height: auto; }
-  .canal, .canal:has(input:checked) { flex: none; }
-  .canal { width: 100%; }
-  .canal label { flex: 1 1 auto; flex-direction: row; gap: 14px; padding: 16px 20px; min-height: 64px; }
-  .canal .nom-canal { flex: 1; }
   .heros .fond-radar .echo text { display: none; }
-  .canal .nom-canal { writing-mode: horizontal-tb; transform: none; font-size: 22px; }
-  .canal .volet { grid-template-columns: minmax(0, 1fr); padding: 24px; }
   .comparaison { aspect-ratio: 4 / 5; }
   .cartes-chiffres { grid-template-columns: repeat(2, 1fr); }
   .carte-chiffre:nth-child(2) { border-right: 0; }
@@ -516,7 +475,7 @@ mark {
 }
 @media (max-width: 560px) {
   .menu .bouton .texte-bouton { display: none; }
-  .menu .langue { padding: 4px; font-size: 0; gap: 0; }
+  .menu .langue { width: 40px; height: 40px; }
   .menu .bouton { padding-left: 6px; }
   .liste-questions summary { grid-template-columns: 30px 1fr 34px; }
   .liste-questions .categorie { display: none; }
@@ -581,3 +540,79 @@ mark {
 /* TÉLÉCHARGER (20/10/2026) : la carte sombre du téléchargement. */
 .carte-telecharger .boutons { margin-top: 24px; }
 .carte-telecharger .ecrire { margin-top: 22px; }
+
+/* LES ICÔNES DU LOGICIEL (directeur, 20/10/2026 : « le site doit utiliser
+   les mêmes icônes que le logiciel ») : les deux calques de
+   static/icones-vigie, vert et encre, posés en masque — comme dans
+   Vigie. Sur le vert, le détail passe à l'encre et le vert au blanc. */
+.ic { position: relative; display: inline-block; width: 20px; height: 20px; flex: none; }
+.ic i { position: absolute; inset: 0; -webkit-mask: var(--p) center / contain no-repeat; mask: var(--p) center / contain no-repeat; }
+.ic .v { background: var(--vert); }
+.ic .e { background: currentColor; }
+.bouton .rond .ic { width: 20px; height: 20px; }
+.bouton .rond .ic .v { background: #fff; }
+.bouton .rond .ic .e { background: var(--encre); }
+.bouton.vert .rond .ic .v, .tarif:not(.mis) .bouton .rond .ic .v { background: var(--vert); }
+.bouton.vert .rond .ic .e, .tarif:not(.mis) .bouton .rond .ic .e { background: var(--sur-nuit); }
+.bouton.verre .rond .ic .v { background: var(--vert); }
+.bouton.verre .rond .ic .e { background: var(--sur-nuit); }
+.puce .ic { width: 18px; height: 18px; }
+
+/* « TOUT AU MÊME ENDROIT » (choix « A » du directeur, 20/10/2026) : les onglets
+   aux icônes du logiciel, et l'écran choisi en grand, sur fond noir. */
+.onglets-ecrans { background: var(--nuit); color: var(--sur-nuit); border-radius: var(--rayon-grand); padding: clamp(18px, 2.4vw, 30px); }
+.onglets-ecrans > input { position: absolute; opacity: 0; pointer-events: none; }
+.barre-onglets { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+.barre-onglets label { display: inline-flex; align-items: center; gap: 10px; padding: 12px 18px; border-radius: 999px; cursor: pointer;
+  background: rgba(238, 243, 232, .07); border: 1px solid var(--trait-nuit); font: 600 15px/1 "Inter", sans-serif; white-space: nowrap; }
+.barre-onglets label:hover { border-color: var(--vert); }
+.barre-onglets .ic .e { background: var(--sur-nuit); }
+.panneau-onglet { display: none; grid-template-columns: minmax(0, .75fr) minmax(0, 1.5fr); gap: clamp(24px, 3vw, 44px); align-items: center; margin-top: clamp(22px, 3vw, 34px); }
+.num-onglet { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 999px; background: var(--vert); color: var(--encre); font: 700 13px "Inter", sans-serif; }
+.texte-onglet .bouton { margin-top: 26px; }
+.texte-onglet h3 { font-size: clamp(28px, 2.6vw, 38px); margin: 18px 0 14px; line-height: 1.05; }
+.texte-onglet p { color: var(--gris-nuit); font-size: 16px; }
+.texte-onglet ul { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 10px; font-size: 15px; }
+.texte-onglet li { display: flex; gap: 10px; align-items: center; }
+.texte-onglet li::before { content: "✓"; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 999px; background: var(--vert); color: var(--encre); font-size: 11px; font-weight: 700; flex: none; }
+.cadre-onglet { position: relative; padding-right: 70px; }
+.cadre-onglet img:first-child { width: 100%; border-radius: 14px; box-shadow: 0 30px 60px rgba(0, 0, 0, .5); }
+.cadre-onglet .tel { position: absolute; right: 0; bottom: -20px; width: 150px; border-radius: 20px; box-shadow: 0 20px 50px rgba(0, 0, 0, .6); }
+.onglets-ecrans:has(> input:nth-of-type(1):checked) .panneau-onglet:nth-child(1) { display: grid; }
+.onglets-ecrans:has(> input:nth-of-type(1):checked) .barre-onglets label:nth-child(1) { background: var(--vert); color: var(--encre); border-color: var(--vert); }
+.onglets-ecrans:has(> input:nth-of-type(1):checked) .barre-onglets label:nth-child(1) .ic .v { background: #fff; }
+.onglets-ecrans:has(> input:nth-of-type(1):checked) .barre-onglets label:nth-child(1) .ic .e { background: var(--encre); }
+.onglets-ecrans > input:nth-of-type(1):focus-visible ~ .barre-onglets label:nth-child(1) { outline: 3px solid var(--vert); outline-offset: 3px; }
+.onglets-ecrans:has(> input:nth-of-type(2):checked) .panneau-onglet:nth-child(2) { display: grid; }
+.onglets-ecrans:has(> input:nth-of-type(2):checked) .barre-onglets label:nth-child(2) { background: var(--vert); color: var(--encre); border-color: var(--vert); }
+.onglets-ecrans:has(> input:nth-of-type(2):checked) .barre-onglets label:nth-child(2) .ic .v { background: #fff; }
+.onglets-ecrans:has(> input:nth-of-type(2):checked) .barre-onglets label:nth-child(2) .ic .e { background: var(--encre); }
+.onglets-ecrans > input:nth-of-type(2):focus-visible ~ .barre-onglets label:nth-child(2) { outline: 3px solid var(--vert); outline-offset: 3px; }
+.onglets-ecrans:has(> input:nth-of-type(3):checked) .panneau-onglet:nth-child(3) { display: grid; }
+.onglets-ecrans:has(> input:nth-of-type(3):checked) .barre-onglets label:nth-child(3) { background: var(--vert); color: var(--encre); border-color: var(--vert); }
+.onglets-ecrans:has(> input:nth-of-type(3):checked) .barre-onglets label:nth-child(3) .ic .v { background: #fff; }
+.onglets-ecrans:has(> input:nth-of-type(3):checked) .barre-onglets label:nth-child(3) .ic .e { background: var(--encre); }
+.onglets-ecrans > input:nth-of-type(3):focus-visible ~ .barre-onglets label:nth-child(3) { outline: 3px solid var(--vert); outline-offset: 3px; }
+.onglets-ecrans:has(> input:nth-of-type(4):checked) .panneau-onglet:nth-child(4) { display: grid; }
+.onglets-ecrans:has(> input:nth-of-type(4):checked) .barre-onglets label:nth-child(4) { background: var(--vert); color: var(--encre); border-color: var(--vert); }
+.onglets-ecrans:has(> input:nth-of-type(4):checked) .barre-onglets label:nth-child(4) .ic .v { background: #fff; }
+.onglets-ecrans:has(> input:nth-of-type(4):checked) .barre-onglets label:nth-child(4) .ic .e { background: var(--encre); }
+.onglets-ecrans > input:nth-of-type(4):focus-visible ~ .barre-onglets label:nth-child(4) { outline: 3px solid var(--vert); outline-offset: 3px; }
+.onglets-ecrans:has(> input:nth-of-type(5):checked) .panneau-onglet:nth-child(5) { display: grid; }
+.onglets-ecrans:has(> input:nth-of-type(5):checked) .barre-onglets label:nth-child(5) { background: var(--vert); color: var(--encre); border-color: var(--vert); }
+.onglets-ecrans:has(> input:nth-of-type(5):checked) .barre-onglets label:nth-child(5) .ic .v { background: #fff; }
+.onglets-ecrans:has(> input:nth-of-type(5):checked) .barre-onglets label:nth-child(5) .ic .e { background: var(--encre); }
+.onglets-ecrans > input:nth-of-type(5):focus-visible ~ .barre-onglets label:nth-child(5) { outline: 3px solid var(--vert); outline-offset: 3px; }
+.onglets-ecrans:has(> input:nth-of-type(6):checked) .panneau-onglet:nth-child(6) { display: grid; }
+.onglets-ecrans:has(> input:nth-of-type(6):checked) .barre-onglets label:nth-child(6) { background: var(--vert); color: var(--encre); border-color: var(--vert); }
+.onglets-ecrans:has(> input:nth-of-type(6):checked) .barre-onglets label:nth-child(6) .ic .v { background: #fff; }
+.onglets-ecrans:has(> input:nth-of-type(6):checked) .barre-onglets label:nth-child(6) .ic .e { background: var(--encre); }
+.onglets-ecrans > input:nth-of-type(6):focus-visible ~ .barre-onglets label:nth-child(6) { outline: 3px solid var(--vert); outline-offset: 3px; }
+
+@media (max-width: 980px) {
+  .panneau-onglet { grid-template-columns: minmax(0, 1fr); }
+  /* Sur un petit écran, la capture du téléphone couvrirait la liste :
+     celle de l'ordinateur suffit. */
+  .cadre-onglet { padding-right: 0; }
+  .cadre-onglet .tel { display: none; }
+}
